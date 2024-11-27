@@ -1,16 +1,16 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
-const jwtkey  = 'e-comm'
 
 require('./db/config');
-
 const user = require('./db/user');
 const product = require('./db/product');
 
 app.use(express.json());
 app.use(cors());
+
+
+
 
 app.post('/register',async(req,resp)=>{
     let ans = await new user(req.body);
@@ -18,25 +18,16 @@ app.post('/register',async(req,resp)=>{
     res = res.toObject();
     delete res.pass  ;
     console.log(res);
-    jwt.sign({res},jwtkey,{expiresIn:'2h'},(err,token)=>{
-      if(err){
-        resp.send("we messed up");
-      }
-      resp.send({res,auth:token});
-    })
+    resp.send({res});
 })
 
 app.post('/login',async(req,resp)=>{
       console.log(req.body);
       if(req.body.pass && req.body.email){
-        let ans = await user.findOne(req.body).select("-pass");
+        let ans = await user.findOne(req.body);
+        //console.log(ans);
         if(ans){
-          jwt.sign({ans},jwtkey,{expiresIn:'2h'},(err,token)=>{
-            if(err){
-              resp.send("we messed up");
-            }
-            resp.send({ans,auth:token});
-          })
+            resp.send({ans});
         }
         else{
           resp.send({result:"no user found"});
@@ -47,7 +38,7 @@ app.post('/login',async(req,resp)=>{
       }
 })
 
-app.post('/addpro',verifytok,async(req,resp)=>{
+app.post('/addpro',async(req,resp)=>{
   let ans = await new product(req.body);
   let res = await ans.save();
   console.log(res);
@@ -55,7 +46,7 @@ app.post('/addpro',verifytok,async(req,resp)=>{
 })
   
 
-app.get('/products',verifytok, async(req,resp)=>{
+app.get('/products', async(req,resp)=>{
        let ans  = await product.find();
        if(ans.length){
          resp.send(ans);
@@ -65,24 +56,38 @@ app.get('/products',verifytok, async(req,resp)=>{
        }
 })
 
-app.delete('/prod/:id',verifytok,async(req,resp)=>{
+// Endpoint to update user profile
+app.put('/updateProfile/:id', async (req, resp) => {
+  const { name, email, password } = req.body;
+  const updatedUser = await user.findByIdAndUpdate(req.params.id, { name, email, password }, { new: true });
+
+  if (updatedUser) {
+      updatedUser.password = undefined;  // To ensure we don't send the password in response
+      resp.send({ updatedUser });
+  } else {
+      resp.send({ result: 'User not found' });
+  }
+});
+
+
+app.delete('/prod/:id',async(req,resp)=>{
       const ans = await product.deleteOne({_id:req.params.id})
       resp.send(ans);
 })
 
-app.get('/prod/:id',verifytok,async(req,resp)=>{
+app.get('/prod/:id',async(req,resp)=>{
       const ans = await product.findOne({_id:req.params.id});
       if(ans){
         resp.send(ans);                        
       }
 })
 
-app.put('/prod/:id',verifytok, async(req,resp)=>{
+app.put('/prod/:id', async(req,resp)=>{
      const ans = await product.updateOne({_id:req.params.id},{$set:req.body})
      resp.send(ans);
 })
 
-app.get('/search/:key',verifytok,async(req,resp)=>{
+app.get('/search/:key',async(req,resp)=>{
      let res = await product.find({
         "$or":[
           {name:{$regex:req.params.key}},
@@ -94,24 +99,6 @@ app.get('/search/:key',verifytok,async(req,resp)=>{
      resp.send(res)
 })
 
-
-function verifytok(req,resp,next){
-      let token = req.headers['authorization'];
-      console.log(token)
-      if(token){
-          jwt.verify(token,jwtkey,(err,valid)=>{
-              if(err){
-                 resp.send("kuch gadbad hai")
-              }
-              else{
-                   next();
-              }
-          })  
-      }
-      else{
-        resp.send("please add token");
-      }
-}
 
 app.listen(4500);
 

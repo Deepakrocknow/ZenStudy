@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Addproduct from './components/Addproduct';
 import Productlist from './components/Productlist';
 import Updatecom from './components/Updatecom';
+import Profile from './components/Profile';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
             <Route path='/' element={<Productlist/>}/>
             <Route path='/add' element={<Addproduct/>}/>
             <Route path='/update/:id' element={<Updatecom/>}/>
-            <Route path='/profile' element={<h1>profile1</h1>}/>
+            <Route path='/profile' element={<Profile/>}/>
             </Route>
             
             <Route path='/signup' element={<Signup/>}/>
