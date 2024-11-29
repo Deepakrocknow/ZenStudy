@@ -9,14 +9,14 @@ const Productlist = () => {
     }, []);
 
     const getproduct = async () => {
-        let res = await fetch('http://localhost:4500/products');
+        let res = await fetch('https://zenstudy-doak.onrender.com/products');
         res = await res.json();
         setPro(res);
         console.log(res);
     };
 
     const deleproduct = async (id) => {
-        let res = await fetch(`http://localhost:4500/prod/${id}`, {
+        let res = await fetch(`https://zenstudy-doak.onrender.com/prod/${id}`, {
             method: 'delete',
         });
         res = await res.json();
@@ -28,7 +28,7 @@ const Productlist = () => {
     const searcHandle = async (event) => {
         let key = event.target.value;
         if (key) {
-            let rest = await fetch(`http://localhost:4500/search/${key}`);
+            let rest = await fetch(`https://zenstudy-doak.onrender.com/search/${key}`);
             rest = await rest.json();
             if (rest) {
                 setPro(rest);
