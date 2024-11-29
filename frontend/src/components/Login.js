@@ -9,7 +9,7 @@ const Login = () => {
 
   const handlelogin =async()=>{
     console.log(email,pass);
-    let result = await fetch( 'http://localhost:4500/login',{
+    let result = await fetch( 'https://zenstudy-doak.onrender.com/login',{
           method:'post',
           body:JSON.stringify({email,pass}),
           headers:{
