@@ -13,7 +13,7 @@ const Profile = () => {
   // Fetch user details when the component mounts
   useEffect(() => {
     const fetchUserDetails = async () => {
-      const result = await fetch(`http://localhost:4500/user/${userId}`);
+      const result = await fetch(`https://zenstudy-doak.onrender.com/user/${userId}`);
       const data = await result.json();
       if (data) {
         setUserDetails({
@@ -48,7 +48,7 @@ const Profile = () => {
       return;  // Prevent form submission if any field is empty
     }
 
-    const response = await fetch(`http://localhost:4500/updateProfile/${userId}`, {
+    const response = await fetch(`https://zenstudy-doak.onrender.com/updateProfile/${userId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
