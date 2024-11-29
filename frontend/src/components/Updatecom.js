@@ -14,7 +14,7 @@ const Updatecom = () => {
     }, []);
 
     const getdetail = async () => {
-        let resp = await fetch(`http://localhost:4500/prod/${params.id}`);
+        let resp = await fetch(`https://zenstudy-doak.onrender.com/prod/${params.id}`);
         resp = await resp.json();
         setName(resp.name);
         setPrice(resp.price);
@@ -24,7 +24,7 @@ const Updatecom = () => {
     };
 
     const updatePro = async () => {
-        let rest = await fetch(`http://localhost:4500/prod/${params.id}`, {
+        let rest = await fetch(`https://zenstudy-doak.onrender.com/prod/${params.id}`, {
             method: 'put',
             body: JSON.stringify({ name, price, category, company }),
             headers: {
