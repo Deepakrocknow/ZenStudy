@@ -18,7 +18,7 @@ const Addproduct = () => {
         console.log(name, price, category, company);
         const userId = JSON.parse(localStorage.getItem('user'))._id;
 
-        let res = await fetch('http://localhost:4500/addpro', {
+        let res = await fetch('https://zenstudy-doak.onrender.com/addpro', {
             method: 'post',
             body: JSON.stringify({ name, price, category, userId, company }),
             headers: {
