@@ -16,7 +16,7 @@ const Signup = () => {
 
   const collectData = async () => {
     console.log(name, email, pass);
-    let result = await fetch('http://localhost:4500/register', {
+    let result = await fetch('https://zenstudy-doak.onrender.com/register', {
       method: 'post',
       body: JSON.stringify({ name, email, pass }),
       headers: {
